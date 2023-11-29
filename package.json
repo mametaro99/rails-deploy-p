@@ -1,6 +1,12 @@
 {
   "name": "sample_app",
   "private": true,
+  "scripts": {
+  "dev": "NODE_OPTIONS='--openssl-legacy-provider' nuxt",
+  "build": "NODE_OPTIONS='--openssl-legacy-provider' nuxt build",
+  "start": "nuxt start",
+  "generate": "NODE_OPTIONS='--openssl-legacy-provider' nuxt generate"
+   },
   "dependencies": {
     "@rails/actioncable": "^6.0.0-alpha",
     "@rails/activestorage": "^6.0.0-alpha",
