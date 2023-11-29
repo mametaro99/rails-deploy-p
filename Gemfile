@@ -21,6 +21,7 @@ gem 'net-http'
 gem 'net-smtp', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
+gem 'psych', '~> 3.1'
 
 
 group :development, :test do
