@@ -13,17 +13,17 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.8
-          
+
       - name: Cache bundle
-         uses: actions/cache@v2
-         with:
-           path: vendor/bundle
-           key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '12.22.12' # ここでNode.jsのバージョンを指定
+          node-version: '12.22.12' # Node.jsのバージョンを指定
 
       - name: Install Bundler dependencies
         run: |
