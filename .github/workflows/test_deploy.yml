@@ -13,6 +13,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.8
+          
+      - name: Cache bundle
+         uses: actions/cache@v2
+         with:
+           path: vendor/bundle
+           key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
