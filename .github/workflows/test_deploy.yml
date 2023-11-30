@@ -14,12 +14,17 @@ jobs:
         with:
           ruby-version: 2.6.8
 
-      - name: Run bundle install
+      - name: Install Bundler dependencies
         run: |
           bundle config --local path vendor/bundle
           bundle config --local without production
           bundle install
 
-      - run: RAILS_ENV=test bundle exec rails assets:precompile
+      - name: Install JavaScript dependencies
+        run: yarn install
 
-      - run: bundle exec rails test
+      - name: Precompile assets
+        run: RAILS_ENV=test bundle exec rails assets:precompile
+
+      - name: Run tests
+        run: bundle exec rails test
