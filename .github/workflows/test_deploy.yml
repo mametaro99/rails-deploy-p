@@ -31,6 +31,12 @@ jobs:
           bundle config --local without production
           bundle install
 
+      - name: Cache yarn
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: yarn-v1-${{ hashFiles('yarn.lock') }}
+
       - name: Install JavaScript dependencies
         run: yarn install
 
