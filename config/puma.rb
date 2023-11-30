@@ -8,5 +8,8 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 workers ENV.fetch("WEB_CONCURRENCY") { 2 }
 preload_app!
 plugin :tmp_restart
-app_root = File.expand_path("../..", __FILE__)
+# ここでapp_rootを直接指定します
+app_root = "/home/webapp/rails-deploy-p"
+
+# bind行を更新して、新しいapp_rootを使用します
 bind "unix:#{app_root}/tmp/sockets/puma.sock"
