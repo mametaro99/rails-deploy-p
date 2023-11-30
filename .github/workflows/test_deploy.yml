@@ -14,12 +14,34 @@ jobs:
         with:
           ruby-version: 2.6.8
 
-      - name: Run bundle install
+      - name: Cache bundle
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.22.12' # Node.jsのバージョンを指定
+
+      - name: Install Bundler dependencies
         run: |
           bundle config --local path vendor/bundle
           bundle config --local without production
           bundle install
 
-      - run: RAILS_ENV=test bundle exec rails assets:precompile
+      - name: Cache yarn
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: yarn-v1-${{ hashFiles('yarn.lock') }}
 
-      - run: bundle exec rails test
+      - name: Install JavaScript dependencies
+        run: yarn install
+
+      - name: Precompile assets
+        run: RAILS_ENV=test bundle exec rails assets:precompile
+
+      - name: Run tests
+        run: bundle exec rails test
