@@ -75,7 +75,9 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
-          ssh -o StrictHostKeyChecking=no -A webapp@${{ secrets.TARGET_HOSTNAME }} "
+          ssh -o StrictHostKeyChecking=no -tt webapp@${{ secrets.TARGET_HOSTNAME }} "
+            sudo apt-get update
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
             export NVM_DIR=\"$HOME/.nvm\"
             [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
             nvm install 12.22.12
