@@ -1,6 +1,6 @@
 name: Test and Deploy
 
-on: 
+on:
   pull_request:
   push:
     branches:
@@ -49,20 +49,29 @@ jobs:
 
       - name: Run tests
         run: bundle exec rails test
-      
+
   deploy:
     name: Deploy app to AWS
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    
+  
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12.22.12' # Node.jsのバージョンを指定
+  
+      # 以降のステップ（SSHキーの設定、デプロイコマンドなど）
       - name: Install SSH key
         run: |
           mkdir -p -m 700 ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/rails-deploy-webapp
           chmod 600 ~/.ssh/rails-deploy-webapp
-          
+  
       - name: Deploy
         run: |
           eval $(ssh-agent)
