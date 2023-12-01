@@ -76,9 +76,9 @@ jobs:
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
           ssh -o StrictHostKeyChecking=no -tt webapp@${{ secrets.TARGET_HOSTNAME }} "
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-            export NVM_DIR=\"$HOME/.nvm\"
-            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
+            # nvmの初期化
+            export NVM_DIR=\"/home/webapp/.nvm\"
+            [ -s \"/home/webapp/.nvm/nvm.sh\" ] && \. \"/home/webapp/.nvm/nvm.sh\"
             nvm install 12.22.12
             npm install -g yarn
             cd rails-deploy &&
@@ -88,4 +88,5 @@ jobs:
             ~/.rbenv/shims/bundle install &&
             RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
             RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
-            ~/.rbenv/shims/bundle exec pumactl restart"
+            ~/.rbenv/shims/bundle exec pumactl restart
+          "
