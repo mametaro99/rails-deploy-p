@@ -63,7 +63,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '12.22.12' # Node.jsのバージョンを指定
+          node-version: '12.22.12'
   
       - name: Install SSH key
         run: |
@@ -76,8 +76,11 @@ jobs:
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
           ssh -o StrictHostKeyChecking=no -A webapp@${{ secrets.TARGET_HOSTNAME }} "
-            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-            sudo apt-get install -y nodejs
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+            export NVM_DIR=\"$HOME/.nvm\"
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
+            nvm install 12.22.12
+            npm install -g yarn
             cd rails-deploy &&
             git pull origin main &&
             ~/.rbenv/shims/bundle config --local deployment true &&
