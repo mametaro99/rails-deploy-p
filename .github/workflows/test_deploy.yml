@@ -65,7 +65,6 @@ jobs:
         with:
           node-version: '12.22.12' # Node.jsのバージョンを指定
   
-      # 以降のステップ（SSHキーの設定、デプロイコマンドなど）
       - name: Install SSH key
         run: |
           mkdir -p -m 700 ~/.ssh
@@ -76,11 +75,14 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
-          ssh -o StrictHostKeyChecking=no -A webapp@${{ secrets.TARGET_HOSTNAME }} "cd rails-deploy &&
-          git pull origin main &&
-          ~/.rbenv/shims/bundle config --local deployment true &&
-          ~/.rbenv/shims/bundle config --local without development:test &&
-          ~/.rbenv/shims/bundle install &&
-          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
-          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
-          ~/.rbenv/shims/bundle exec pumactl restart"
+          ssh -o StrictHostKeyChecking=no -A webapp@${{ secrets.TARGET_HOSTNAME }} "
+            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            cd rails-deploy &&
+            git pull origin main &&
+            ~/.rbenv/shims/bundle config --local deployment true &&
+            ~/.rbenv/shims/bundle config --local without development:test &&
+            ~/.rbenv/shims/bundle install &&
+            RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
+            RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
+            ~/.rbenv/shims/bundle exec pumactl restart"
