@@ -98,9 +98,9 @@ jobs:
           RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate ||
             (echo 'Database migration failed' && exit 1)
           echo 'Stopping Puma...'
-          ~/.rbenv/shims/bundle exec pumactl stop ||
+          pkill -F tmp/pids/server.pid ||
             (echo 'Puma stop failed' && exit 1)
           echo 'Starting Puma...'
-          ~/.rbenv/shims/bundle exec pumactl start ||
+          ~/.rbenv/shims/bundle exec puma -C config/puma.rb ||
             (echo 'Puma start failed' && exit 1)
           echo 'Deployment completed successfully.'"
