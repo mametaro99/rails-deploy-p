@@ -97,7 +97,10 @@ jobs:
           echo 'Migrating database...'
           RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate ||
             (echo 'Database migration failed' && exit 1)
-          echo 'Restarting Puma...'
-          ~/.rbenv/shims/bundle exec pumactl restart ||
-            (echo 'Puma restart failed' && exit 1)
+          echo 'Stopping Puma...'
+          ~/.rbenv/shims/bundle exec pumactl stop ||
+            (echo 'Puma stop failed' && exit 1)
+          echo 'Starting Puma...'
+          ~/.rbenv/shims/bundle exec pumactl start ||
+            (echo 'Puma start failed' && exit 1)
           echo 'Deployment completed successfully.'"
