@@ -75,17 +75,12 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
-          ssh -o StrictHostKeyChecking=no -tt webapp@${{ secrets.TARGET_HOSTNAME }} "
-            # nvmの初期化
-            export NVM_DIR=\"/home/webapp/.nvm\"
-            [ -s \"/home/webapp/.nvm/nvm.sh\" ] && \. \"/home/webapp/.nvm/nvm.sh\"
-            nvm install 12.22.12
-            npm install -g yarn
-            cd rails-deploy &&
-            git pull origin main &&
-            ~/.rbenv/shims/bundle config --local deployment true &&
-            ~/.rbenv/shims/bundle config --local without development:test &&
-            ~/.rbenv/shims/bundle install &&
-            RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
-            RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
-            ~/.rbenv/shims/bundle exec pumactl restart"
+          ssh -o StrictHostKeyChecking=no -A webapp@${{ secrets.TARGET_HOSTNAME }} "
+          cd rails-deploy &&
+          git pull origin main &&
+          ~/.rbenv/shims/bundle config --local deployment true &&
+          ~/.rbenv/shims/bundle config --local without development:test &&
+          ~/.rbenv/shims/bundle install &&
+          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
+          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
+          ~/.rbenv/shims/bundle exec pumactl restart"
