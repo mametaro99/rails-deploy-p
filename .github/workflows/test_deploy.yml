@@ -91,6 +91,13 @@ jobs:
           ~/.rbenv/shims/bundle install &&
           mkdir -p tmp/pids &&
           touch tmp/pids/server.pid &&
-          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile &&
-          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate &&
-          ~/.rbenv/shims/bundle exec pumactl restart"
+          echo 'Precompiling assets...'
+          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails assets:precompile ||
+            (echo 'Asset precompilation failed' && exit 1)
+          echo 'Migrating database...'
+          RAILS_ENV=production ~/.rbenv/shims/bundle exec rails db:migrate ||
+            (echo 'Database migration failed' && exit 1)
+          echo 'Restarting Puma...'
+          ~/.rbenv/shims/bundle exec pumactl restart ||
+            (echo 'Puma restart failed' && exit 1)
+          echo 'Deployment completed successfully.'"
