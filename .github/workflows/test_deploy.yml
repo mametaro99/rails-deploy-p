@@ -23,6 +23,12 @@ jobs:
         with:
           path: vendor/bundle
           key: bundle-v1-${{ hashFiles('Gemfile.lock') }}
+      
+      - name: Update listen gem
+        run: |
+          bundle config --local path vendor/bundle
+          bundle config --local without production
+          bundle update listen    
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
