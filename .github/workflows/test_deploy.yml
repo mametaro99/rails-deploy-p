@@ -104,6 +104,7 @@ jobs:
         run: |
           eval $(ssh-agent)
           ssh-add ~/.ssh/rails-deploy-webapp
+          bundle install
           bundle exec cap production deploy
         env:
           CAP_SERVER: ${{ secrets.TARGET_HOSTNAME }}
