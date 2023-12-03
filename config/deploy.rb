@@ -54,14 +54,21 @@ set :puma_threads, [0, 5]
 set :puma_workers, 2
 
 # Node.js の特定のバージョンを使用するためのタスク
+# 環境変数の設定
+set :default_env, {
+  'PATH' => "$HOME/.nvm/versions/node/v12.22.12/bin:$PATH",
+  'NODE_ENV' => 'production'
+}
+
 namespace :deploy do
   desc 'Use specific Node version'
   task :use_node_version do
     on roles(:app) do
-      execute :source, "$HOME/.nvm/nvm.sh && nvm use 12"
+      # Node.js バージョンの使用
+      execute "nvm install 16 && nvm use 16 && npm install -g yarn"
     end
   end
+
 end
 
-# カスタムタスクを bundle install の前に実行
 before 'bundler:install', 'deploy:use_node_version'
